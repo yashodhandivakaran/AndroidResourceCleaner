@@ -1,5 +1,5 @@
 # AndroidResourceCleaner
-This is a simple  python script which takes the path of lint-result xml and will remove all the unused files form the project.
+This is a simple  python script which takes the path of lint-result xml file and removes all the unused files from the project.
 
 #How to use it:
 
