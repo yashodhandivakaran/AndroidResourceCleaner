@@ -41,7 +41,7 @@ def xmlParser(file):
 			if not issue.hasAttribute("errorLine1"):
 				locations = issue.getElementsByTagName("location")
 				for location in locations:
-					resource = location.attribute["file"]
+					resource = location.attributes["file"]
 					resource = resource.value
 					print >> outputFile,'unused resource cleaned ',resource
 					os.remove(resource)
