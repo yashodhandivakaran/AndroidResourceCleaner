@@ -20,6 +20,12 @@ $ ./android_resource_cleaner.py -i ~/<PROJECT_PATH>/build/outputs/lint-results.x
 ```
 * This will clear all the resource files which are not used in your project as per lint.
 * To see all the files which are delete go to android_resource_cleaner_output.txt file, this file will be created in the directory where this script is present.
+* If you want some files as an exception while deleting the resources then provide the names of the files in a text file with space separation. For eg the content of the exception_file would be "file1.png file2.xml file3.png"
+* Once names are provided execute the script as
+```sh
+$ ./android_resource_cleaner.py -i ~/<PROJECT_PATH>/build/outputs/lint-results.xml -e <PATH_TO_FILE_WITH_FILE_NAMES>
+
+
 
 
 
