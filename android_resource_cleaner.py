@@ -20,7 +20,7 @@ def main(argv):
 		sys.exit(2)
 	for opt, arg in opts:
 		if opt == '-h':
-         		print 'android_resource_cleaner.py -i <inputfile>'
+         		print 'android_resource_cleaner.py -i <inputFile> -e <exceptionFile>'
         		sys.exit()
      		elif opt in ("-i", "--inputFile"):
          		inputfile = arg
