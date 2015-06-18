@@ -5,12 +5,18 @@ import xml.dom.minidom
 import sys, getopt
 import os
 
+inputfile = ''
+exceptionfile = ""
+
 def main(argv):
-	inputfile = ''
+
+	global inputfile
+	global exceptionfile
+
 	try:
-      		opts, args = getopt.getopt(argv,"hi:",["inputFile="])
+      		opts, args = getopt.getopt(argv,"hi:e:",["inputFile=","exceptionFile"])
 	except getopt.GetoptError:
-		print 'android_resource_cleaner.py -i <inputfile>'
+		print 'android_resource_cleaner.py -i <inputfile> -'
 		sys.exit(2)
 	for opt, arg in opts:
 		if opt == '-h':
@@ -18,14 +24,28 @@ def main(argv):
         		sys.exit()
      		elif opt in ("-i", "--inputFile"):
          		inputfile = arg
-		
-	return inputfile
+		elif opt in ("-e", "--exceptionFile"):
+			exceptionfile = arg
 
 
-def xmlParser(file):
-	DOMTree = xml.dom.minidom.parse(file)
+def xmlParser(inputfile,exceptionfile):
+
+	if not inputfile:
+		print 'please enter input file path'
+		return 
+
+	DOMTree = xml.dom.minidom.parse(inputfile)
 	issuesCollection = DOMTree.documentElement
+	
+	#exception set
+	exceptionSet = set()
 
+	# initialize the exception set with file names
+	if exceptionfile:
+		fileNames = file(exceptionfile).read().split()
+		for fileName in fileNames:
+			exceptionSet.add(fileName)
+		
 	# Get all the issues in the collection
 	issues = issuesCollection.getElementsByTagName("issue")
 
@@ -43,9 +63,12 @@ def xmlParser(file):
 				for location in locations:
 					resource = location.attributes["file"]
 					resource = resource.value
-					print >> outputFile,'unused resource cleaned ',resource
-					os.remove(resource)
-					resourceTotal = resourceTotal + 1
+					resourceFileName = resource.split('/')
+					resourceFileName = resourceFileName[len(resourceFileName)-1]
+					if not resourceFileName in exceptionSet:
+						print >> outputFile,'unused resource cleaned ',resource
+						os.remove(resource)
+						resourceTotal = resourceTotal + 1
 
 
 
@@ -55,7 +78,7 @@ def xmlParser(file):
 	print 'Total clean up = ',resourceTotal
 
 if __name__ == "__main__":
-	input = main(sys.argv[1:])
-	xmlParser(input)
+	main(sys.argv[1:])
+	xmlParser(inputfile,exceptionfile)
 
 
